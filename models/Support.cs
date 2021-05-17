@@ -1,56 +1,14 @@
-using System;
-using StaffLib;
+﻿using System;
+using StaffApp.Models.Base;
 
-namespace SupportLib
+namespace StaffApp.Models
 {
     public class Support : Staff
     {
-        private int Age { get; set; }
+        public int Age { get; set; }
         public Support()
         {
             Type = "Support";
         }
-        public override void AddStaffDetails()
-        {
-            int parseInput;
-            base.AddStaffDetails();
-            Console.WriteLine("Enter the age");
-            
-            if( Int32.TryParse( Console.ReadLine(), out parseInput ))
-            {
-                Age = parseInput;
-            }
-            else
-            {
-                Console.WriteLine("Invalid age");
-            }
-        }
-        public override void UpdateStaffDetails()
-        {
-            int parseInput;
-            string checkInput;
-            base.UpdateStaffDetails();
-            Console.WriteLine("Enter the new age");
-            checkInput = Console.ReadLine();
-
-            if( checkInput != "" )
-            {
-                if( Int32.TryParse( checkInput, out parseInput ))
-                {
-                    Age = parseInput;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid age");
-                }
-            }
-        }
-        public override void ViewStaffDetails()
-        {
-            base.ViewStaffDetails();
-            Console.WriteLine("Age: {0}\n", Age);
-        }
-
-
     }
 }

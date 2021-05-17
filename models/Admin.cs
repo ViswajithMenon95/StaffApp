@@ -1,38 +1,14 @@
-using System;
-using StaffLib;
+﻿using System;
+using StaffApp.Models.Base;
 
-namespace AdminLib
+namespace StaffApp.Models
 {
     public class Admin : Staff
     {
-        private string Department { get; set; }
+        public string Department { get; set; }
         public Admin()
         {
             Type = "Administrative";
         }
-        public override void AddStaffDetails()
-        {
-            base.AddStaffDetails();
-            Console.WriteLine("Enter the department");
-            Department = Console.ReadLine();
-        }
-        public override void UpdateStaffDetails()
-        {
-            string checkInput;
-            base.UpdateStaffDetails();
-            Console.WriteLine("Enter the new department");
-            checkInput = Console.ReadLine();
-            if( checkInput != "" )
-            {
-                Department = checkInput;
-            }
-        }
-        public override void ViewStaffDetails()
-        {
-            base.ViewStaffDetails();
-            Console.WriteLine("Department: {0}\n", Department);
-        }
-
-
     }
 }

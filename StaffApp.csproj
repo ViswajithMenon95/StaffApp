@@ -53,6 +53,9 @@
     <Compile Include="Data\StaffInJson.cs" />
     <Compile Include="Data\StaffInMemory.cs" />
     <Compile Include="Data\StaffInXml.cs" />
+    <Compile Include="Helpers\AdminHelper.cs" />
+    <Compile Include="Helpers\SupportHelper.cs" />
+    <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Models\Base\Staff.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Support.cs" />
@@ -62,7 +65,9 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

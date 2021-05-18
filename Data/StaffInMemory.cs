@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using StaffApp.Models;
 using StaffApp.Models.Base;
 using StaffApp.Utilities;
+using StaffApp.Helpers;
 
 
 namespace StaffApp.Data
@@ -10,166 +11,106 @@ namespace StaffApp.Data
     public class StaffInMemory : IStaff
     {
         private static List<Staff> staffList = new List<Staff>();
-        public void AddStaffDetails(int choice)
-        {
-            Staff addObj = null;
+		public void AddStaffDetails(int choice)
+		{
+			Staff addObj = null;
 
-            if (choice == 1)
-            {
-                addObj = new Teacher();
+			if (choice == 1)
+			{
+				addObj = TeacherHelper.AddTeacherDetails();
+			}
 
-                Utils.AddCommonDetails(addObj);
-                Console.WriteLine("Enter the subject");
-                ((Teacher)addObj).Subject = Console.ReadLine();
-            }
+			else if (choice == 2)
+			{
+				addObj = AdminHelper.AddAdminDetails();
+			}
 
-            else if (choice == 2)
-            {
-                addObj = new Admin();
+			else if (choice == 3)
+			{
+				addObj = SupportHelper.AddSupportDetails();
+			}
 
-                Utils.AddCommonDetails(addObj);
-                Console.WriteLine("Enter the department");
-                ((Admin)addObj).Department = Console.ReadLine();
-            }
+			staffList.Add(addObj);
+		}
 
-            else if (choice == 3)
-            {
-                addObj = new Support();
-                int parseInput;
+		public void UpdateStaffDetails()
+		{
+			Staff updateObj = Utils.FindStaff(staffList);
 
-                Utils.AddCommonDetails(addObj);
-                Console.WriteLine("Enter the age");
+			if (updateObj != null)
+			{
+				if (updateObj is Teacher)
+				{
+					TeacherHelper.UpdateTeacherDetails((Teacher)updateObj);
+				}
+				else if (updateObj is Admin)
+				{
+					AdminHelper.UpdateAdminDetails((Admin)updateObj);
+				}
+				else if (updateObj is Support)
+				{
+					SupportHelper.UpdateSupportDetails((Support)updateObj);
+				}
+			}
+			else
+			{
+				Console.WriteLine("Not found");
+			}
 
-                if (Int32.TryParse(Console.ReadLine(), out parseInput))
-                {
-                    ((Support)addObj).Age = parseInput;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid age");
-                }
-            }
+		}
 
-            staffList.Add(addObj);
-        }
-        public void UpdateStaffDetails()
-        {
-            Staff updateObj = Utils.FindStaff(staffList);
+		public void ViewStaffDetails(int viewChoice)
+		{
+			if (viewChoice == 1)
+			{
+				Staff viewObj = Utils.FindStaff(staffList);
 
-            if (updateObj != null)
-            {
-                string checkInput;
-                Console.WriteLine("Enter the new staff name");
-                checkInput = Console.ReadLine();
-                if (checkInput != "")
-                {
-                    updateObj.Name = checkInput;
-                }
+				if (viewObj != null)
+				{
 
-                Console.WriteLine("Enter the new staff phone number");
-                checkInput = Console.ReadLine();
-                if (checkInput != "")
-                {
-                    updateObj.Phone = checkInput;
-                }
+					if (viewObj is Teacher)
+					{
+						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
+					}
+					else if (viewObj is Admin)
+					{
+						AdminHelper.ViewAdminDetails((Admin)viewObj);
+					}
+					else if (viewObj is Support)
+					{
+						SupportHelper.ViewSupportDetails((Support)viewObj);
+					}
+				}
+				else
+				{
+					Console.WriteLine("Not found");
+				}
+			}
+			else if (1 < viewChoice && viewChoice < 6)
+			{
+				foreach (Staff viewObj in staffList)
+				{
+					if ((viewObj is Teacher) && (viewChoice == 2 || viewChoice == 5))
+					{
+						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
+					}
+					else if ((viewObj is Admin) && (viewChoice == 3 || viewChoice == 5))
+					{
+						AdminHelper.ViewAdminDetails((Admin)viewObj);
+					}
+					else if ((viewObj is Support) && (viewChoice == 4 || viewChoice == 5))
+					{
+						SupportHelper.ViewSupportDetails((Support)viewObj);
+					}
+				}
+			}
+			else
+			{
+				Console.WriteLine("Invalid choice");
+			}
+		}
 
-                if (updateObj is Teacher)
-                {
-                    Console.WriteLine("Enter the new subject");
-                    checkInput = Console.ReadLine();
-                    if (checkInput != "")
-                    {
-                        ((Teacher)updateObj).Subject = checkInput;
-                    }
-                }
-                else if (updateObj is Admin)
-                {
-                    Console.WriteLine("Enter the new department");
-                    checkInput = Console.ReadLine();
-                    if (checkInput != "")
-                    {
-                        ((Admin)updateObj).Department = checkInput;
-                    }
-                }
-                else if (updateObj is Support)
-                {
-                    Console.WriteLine("Enter the new age");
-                    checkInput = Console.ReadLine();
-
-                    if (checkInput != "")
-                    {
-                        int parseInput;
-                        if (Int32.TryParse(checkInput, out parseInput))
-                        {
-                            ((Support)updateObj).Age = parseInput;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid age");
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Not found");
-            }
-        }
-        public void ViewStaffDetails(int viewChoice)
-        {
-            if (viewChoice == 1)
-            {
-                Staff viewObj = Utils.FindStaff(staffList);
-
-                if (viewObj != null)
-                {
-                    Utils.DisplayCommonDetails(viewObj);
-
-                    if (viewObj is Teacher)
-                    {
-                        Console.WriteLine("Subject: {0}\n", ((Teacher)viewObj).Subject);
-                    }
-                    else if (viewObj is Admin)
-                    {
-                        Console.WriteLine("Department: {0}\n", ((Admin)viewObj).Department);
-                    }
-                    else if (viewObj is Support)
-                    {
-                        Console.WriteLine("Age: {0}\n", ((Support)viewObj).Age);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Not found");
-                }
-            }
-            else if (1 < viewChoice && viewChoice < 6)
-            {
-                foreach (Staff viewObj in staffList)
-                {
-                    if ((viewObj is Teacher) && (viewChoice == 2 || viewChoice == 5))
-                    {
-                        Utils.DisplayCommonDetails(viewObj);
-                        Console.WriteLine("Subject: {0}\n", ((Teacher)viewObj).Subject);
-                    }
-                    else if ((viewObj is Admin) && (viewChoice == 3 || viewChoice == 5))
-                    {
-                        Utils.DisplayCommonDetails(viewObj);
-                        Console.WriteLine("Department: {0}\n", ((Admin)viewObj).Department);
-                    }
-                    else if ((viewObj is Support) && (viewChoice == 4 || viewChoice == 5))
-                    {
-                        Utils.DisplayCommonDetails(viewObj);
-                        Console.WriteLine("Age: {0}\n", ((Support)viewObj).Age);
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid choice");
-            }
-        }
-        public void DeleteStaffDetails()
+		public void DeleteStaffDetails()
         {
             Staff deleteObj = Utils.FindStaff(staffList);
 

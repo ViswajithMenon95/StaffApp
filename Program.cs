@@ -33,7 +33,7 @@ namespace StaffApp
 
                 Utils.OperationsMenu();
 
-                if (Int32.TryParse(Console.ReadLine(), out menuChoice))
+                if (int.TryParse(Console.ReadLine(), out menuChoice))
                 {
                     switch (menuChoice)
                     {
@@ -41,7 +41,7 @@ namespace StaffApp
                             int staffChoice;
                             Utils.AddMenu();
 
-                            if (Int32.TryParse(Console.ReadLine(), out staffChoice))
+                            if (int.TryParse(Console.ReadLine(), out staffChoice))
                             {
                                 if (Enum.IsDefined(typeof(StaffType), staffChoice))
                                 {
@@ -60,7 +60,7 @@ namespace StaffApp
                         case 2:
                             int viewChoice;
                             Utils.ViewMenu();
-                            if (Int32.TryParse(Console.ReadLine(), out viewChoice))
+                            if (int.TryParse(Console.ReadLine(), out viewChoice))
                             {
                                 staffObj.ViewStaffDetails(viewChoice);
                             }

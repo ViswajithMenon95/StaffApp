@@ -12,7 +12,7 @@ namespace StaffApp.Utilities
             int findId;
 
             Console.WriteLine("Enter the Id of the staff member");
-            if (Int32.TryParse(Console.ReadLine(), out findId))
+            if (int.TryParse(Console.ReadLine(), out findId))
             {
                 findObj = list.Find(searchObj => searchObj.Id == findId);
             }
@@ -45,6 +45,7 @@ namespace StaffApp.Utilities
             Console.WriteLine("\t5 - View All");
 
         }
+
         public static void AddCommonDetails(Staff addObj)
         {
             Console.WriteLine("Enter the staff name");
@@ -52,6 +53,7 @@ namespace StaffApp.Utilities
             Console.WriteLine("Enter the staff phone number");
             addObj.Phone = Console.ReadLine();
         }
+
         public static void DisplayCommonDetails(Staff viewObj)
         {
             Console.WriteLine("Id: {0}", viewObj.Id);
@@ -59,5 +61,6 @@ namespace StaffApp.Utilities
             Console.WriteLine("Type: {0}", viewObj.Type);
             Console.WriteLine("Phone: {0}", viewObj.Phone);
         }
+
     }
 }

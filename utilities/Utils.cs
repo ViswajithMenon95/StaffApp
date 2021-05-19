@@ -1,24 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using StaffApp.Models.Base;
 
 namespace StaffApp.Utilities
 {
     public static class Utils
     {
-        public static Staff FindStaff(List<Staff> list)
-        {
-            Staff findObj = null;
-            int findId;
-
-            Console.WriteLine("Enter the Id of the staff member");
-            if (int.TryParse(Console.ReadLine(), out findId))
-            {
-                findObj = list.Find(searchObj => searchObj.Id == findId);
-            }
-
-            return findObj;
-        }
         public static void OperationsMenu()
         {
             Console.WriteLine("\nEnter your choice:\n");

@@ -1,17 +1,22 @@
 ﻿using System;
 using StaffApp.Models;
 using StaffApp.Utilities;
+using StaffApp.Data;
 
 namespace StaffApp.Helpers
 {
 	class SupportHelper
 	{
-		public static Support AddSupportDetails()
+		public static void AddSupportDetails( IStaff staffObj )
 		{
 			Support addObj = new Support();;
 			int parseInput;
 
 			Utils.AddCommonDetails(addObj);
+
+			int newId = staffObj.GetMaxId() + 1;
+			addObj.Id = newId;
+
 			Console.WriteLine("Enter the age");
 
 			if (int.TryParse(Console.ReadLine(), out parseInput))
@@ -23,7 +28,7 @@ namespace StaffApp.Helpers
 				Console.WriteLine("Invalid age");
 			}
 
-			return addObj;
+			staffObj.AddStaffDetails(addObj);
 		}
 
 		public static void UpdateSupportDetails( Support updateObj )

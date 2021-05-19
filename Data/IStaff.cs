@@ -1,14 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using StaffApp.Models.Base;
-using StaffApp.Models;
 
 namespace StaffApp.Data
 {
     public interface IStaff
     {
-        void AddStaffDetails(int staffChoice);
+        void AddStaffDetails(Staff addObj);
         void UpdateStaffDetails();
-        void ViewStaffDetails(int viewChoice);
-        void DeleteStaffDetails();
+		Staff GetStaffById(int findId);
+		List<Staff> GetAllStaff();
+		int GetMaxId();
+		void DeleteStaffDetails(Staff deleteObj);
+		
     }
 }

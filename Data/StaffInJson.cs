@@ -1,12 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Configuration;
 using Newtonsoft.Json;
-using StaffApp.Models;
 using StaffApp.Models.Base;
-using StaffApp.Utilities;
-using StaffApp.Helpers;
 
 namespace StaffApp.Data
 {
@@ -37,124 +33,51 @@ namespace StaffApp.Data
 			}
 		}
 
-		public void AddStaffDetails(int choice)
+		public void AddStaffDetails(Staff addObj)
 		{
-			Staff addObj = null;
-
-			if(choice == 1)
-            {
-				addObj = TeacherHelper.AddTeacherDetails();
-			}
-
-            else if (choice == 2)
-			{
-				addObj = AdminHelper.AddAdminDetails();
-			}
-
-			else if (choice == 3)
-			{
-				addObj = SupportHelper.AddSupportDetails();
-			}
-
 			staffList.Add(addObj);
 
 			SerializeToJson();
 		}
 
-
 		public void UpdateStaffDetails()
 		{
-			Staff updateObj = Utils.FindStaff(staffList);
+			SerializeToJson();
+		}
 
-			if (updateObj != null)
-			{
-				if (updateObj is Teacher)
-				{
-					TeacherHelper.UpdateTeacherDetails((Teacher)updateObj);
-				}
-				else if (updateObj is Admin)
-				{
-					AdminHelper.UpdateAdminDetails((Admin)updateObj);
-				}
-				else if (updateObj is Support)
-				{
-					SupportHelper.UpdateSupportDetails((Support)updateObj);
-				}
-			}
-			else
-			{
-				Console.WriteLine("Not found");
-			}
+		public Staff GetStaffById(int staffId)
+		{
+			Staff findObj = staffList.Find(searchObj => searchObj.Id == staffId);
+
+			return findObj;
+		}
+
+		public List<Staff> GetAllStaff()
+		{
+			return staffList;
+		}
+
+		public void DeleteStaffDetails(Staff deleteObj)
+		{
+			staffList.Remove(deleteObj);
 
 			SerializeToJson();
 		}
 
-		public void ViewStaffDetails(int viewChoice)
+		public int GetMaxId()
 		{
-			if (viewChoice == 1)
-			{
-				Staff viewObj = Utils.FindStaff(staffList);
+			int maxId;
 
-				if (viewObj != null)
-				{
-
-					if (viewObj is Teacher)
-					{
-						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
-					}
-					else if (viewObj is Admin)
-					{
-						AdminHelper.ViewAdminDetails((Admin)viewObj);
-					}
-					else if (viewObj is Support)
-					{
-						SupportHelper.ViewSupportDetails((Support)viewObj);
-					}
-				}
-				else
-				{
-					Console.WriteLine("Not found");
-				}
-			}
-			else if (1 < viewChoice && viewChoice < 6)
+			if (staffList.Count == 0)
 			{
-				foreach (Staff viewObj in staffList)
-				{
-					if ((viewObj is Teacher) && (viewChoice == 2 || viewChoice == 5))
-					{
-						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
-					}
-					else if ((viewObj is Admin) && (viewChoice == 3 || viewChoice == 5))
-					{
-						AdminHelper.ViewAdminDetails((Admin)viewObj);
-					}
-					else if ((viewObj is Support) && (viewChoice == 4 || viewChoice == 5))
-					{
-						SupportHelper.ViewSupportDetails((Support)viewObj);
-					}
-				}
+				maxId = 0;
 			}
 			else
 			{
-				Console.WriteLine("Invalid choice");
+				int maxIndex = staffList.Count - 1;
+				maxId = staffList[maxIndex].Id;
 			}
-		}
-
-		public void DeleteStaffDetails()
-		{
-			Staff deleteObj = Utils.FindStaff(staffList);
-
-			if (deleteObj != null)
-			{
-				staffList.Remove(deleteObj);
-			}
-			else
-			{
-				Console.WriteLine("Not found");
-			}
-
-			SerializeToJson();
-
+			return maxId;
 		}
 
 		public void SerializeToJson()

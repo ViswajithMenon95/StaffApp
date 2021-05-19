@@ -6,17 +6,10 @@ namespace StaffApp.Models.Base
 	[XmlInclude(typeof( Teacher )), XmlInclude(typeof( Admin )), XmlInclude(typeof( Support ))]
 	public abstract class Staff
 	{
-		private static int idCount = 0;
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Type { get; set; }
 		public string Phone { get; set; }
-
-		public Staff()
-		{
-			idCount++;
-			Id = idCount;
-		}
 
 		public virtual void AddStaffDetails()
 		{

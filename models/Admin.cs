@@ -1,5 +1,4 @@
-﻿using System;
-using StaffApp.Models.Base;
+﻿using StaffApp.Models.Base;
 
 namespace StaffApp.Models
 {

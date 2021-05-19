@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using StaffApp.Utilities;
 using StaffApp.Data;
 using System.Configuration;
+using StaffApp.Helpers;
 
 namespace StaffApp
 {
@@ -45,7 +45,7 @@ namespace StaffApp
                             {
                                 if (Enum.IsDefined(typeof(StaffType), staffChoice))
                                 {
-                                    staffObj.AddStaffDetails(staffChoice);
+									StaffHelper.AddDetails( (StaffType)staffChoice, staffObj );
                                 }
                                 else
                                 {
@@ -62,7 +62,7 @@ namespace StaffApp
                             Utils.ViewMenu();
                             if (int.TryParse(Console.ReadLine(), out viewChoice))
                             {
-                                staffObj.ViewStaffDetails(viewChoice);
+								StaffHelper.ViewDetails(viewChoice, staffObj);
                             }
                             else
                             {
@@ -70,10 +70,10 @@ namespace StaffApp
                             }
                             break;
                         case 3:
-                            staffObj.UpdateStaffDetails();
+							StaffHelper.UpdateDetails(staffObj);
                             break;
                         case 4:
-                            staffObj.DeleteStaffDetails();
+							StaffHelper.DeleteDetails(staffObj);
                             break;
                         default:
                             Console.WriteLine("Invalid choice");

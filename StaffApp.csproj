@@ -54,6 +54,7 @@
     <Compile Include="Data\StaffInMemory.cs" />
     <Compile Include="Data\StaffInXml.cs" />
     <Compile Include="Helpers\AdminHelper.cs" />
+    <Compile Include="Helpers\StaffHelper.cs" />
     <Compile Include="Helpers\SupportHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Models\Base\Staff.cs" />

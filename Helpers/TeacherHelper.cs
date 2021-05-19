@@ -1,25 +1,24 @@
 ﻿using System;
 using StaffApp.Models;
 using StaffApp.Utilities;
-using StaffApp.Data;
 
 namespace StaffApp.Helpers
 {
 	class TeacherHelper
 	{
-		public static void AddTeacherDetails(IStaff staffObj)
+		public static Teacher AddTeacherDetails(int maxId)
 		{
 			Teacher addObj = new Teacher();
 
 			Utils.AddCommonDetails(addObj);
 
-			int newId = staffObj.GetMaxId() + 1;
+			int newId = maxId + 1;
 			addObj.Id = newId;
 
 			Console.WriteLine("Enter the subject");
 			addObj.Subject = Console.ReadLine();
 
-			staffObj.AddStaffDetails(addObj);
+			return addObj;
 		} 
 
 		public static void UpdateTeacherDetails( Teacher updateObj )

@@ -9,8 +9,6 @@ namespace StaffApp.Data
         void UpdateStaffDetails();
 		Staff GetStaffById(int findId);
 		List<Staff> GetAllStaff();
-		int GetMaxId();
-		void DeleteStaffDetails(Staff deleteObj);
-		
+		void DeleteStaffDetails(Staff deleteObj);		
     }
 }

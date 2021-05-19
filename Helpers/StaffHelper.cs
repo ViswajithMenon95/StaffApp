@@ -10,20 +10,33 @@ namespace StaffApp.Helpers
 	{
 		public static void AddDetails( StaffType type, IStaff staffObj)
 		{
+			Staff addObj = null;
+			int maxId = 0;
+
+			if (staffObj is StaffInMemory)
+				maxId = ((StaffInMemory)staffObj).GetMaxId();
+			else if (staffObj is StaffInXml)
+				maxId = ((StaffInXml)staffObj).GetMaxId();
+			else if (staffObj is StaffInJson)
+				maxId = ((StaffInJson)staffObj).GetMaxId();
+
+
 			if ( type == StaffType.Teacher )
 			{
-				TeacherHelper.AddTeacherDetails(staffObj);
+				addObj = TeacherHelper.AddTeacherDetails(maxId);
 			}
 
 			else if ( type == StaffType.Admin )
 			{
-				AdminHelper.AddAdminDetails(staffObj);
+				addObj = AdminHelper.AddAdminDetails(maxId);
 			}
 
 			else if ( type == StaffType.Support )
 			{
-				SupportHelper.AddSupportDetails(staffObj);
+				addObj = SupportHelper.AddSupportDetails(maxId);
 			}
+
+			staffObj.AddStaffDetails(addObj);
 		}
 
 		public static void UpdateDetails(IStaff staffObj)

@@ -12,6 +12,7 @@ namespace StaffApp
         Admin,
         Support
     }
+
     class Program
     {
         static void Main(string[] args)

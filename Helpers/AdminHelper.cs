@@ -1,25 +1,24 @@
 ﻿using System;
 using StaffApp.Models;
 using StaffApp.Utilities;
-using StaffApp.Data;
 
 namespace StaffApp.Helpers
 {
 	class AdminHelper
 	{
-		public static void AddAdminDetails(IStaff staffObj)
+		public static Admin AddAdminDetails(int maxId)
 		{
 			Admin addObj = new Admin();
 
 			Utils.AddCommonDetails(addObj);
 
-			int newId = staffObj.GetMaxId() + 1;
+			int newId = maxId + 1;
 			addObj.Id = newId;
 
 			Console.WriteLine("Enter the department");
 			addObj.Department = Console.ReadLine();
 
-			staffObj.AddStaffDetails( addObj );
+			return addObj;
 		}
 
 		public static void UpdateAdminDetails( Admin updateObj )

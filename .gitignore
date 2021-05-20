@@ -1,6 +1,2 @@
-obj/
-bin/
-.vs/
-.vscode/
-Properties/
-packages.config
+*/obj/
+*/bin/

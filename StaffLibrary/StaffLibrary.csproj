@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\IStaff.cs" />
+    <Compile Include="Data\StaffInDB.cs" />
     <Compile Include="Data\StaffInJson.cs" />
     <Compile Include="Data\StaffInMemory.cs" />
     <Compile Include="Data\StaffInXml.cs" />

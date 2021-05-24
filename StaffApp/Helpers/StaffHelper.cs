@@ -19,6 +19,8 @@ namespace StaffApp.Helpers
 				maxId = ((StaffInXml)staffObj).GetMaxId();
 			else if (staffObj is StaffInJson)
 				maxId = ((StaffInJson)staffObj).GetMaxId();
+			else if (staffObj is StaffInDB)
+				maxId = 0;
 
 
 			if ( type == StaffType.Teacher )
@@ -65,7 +67,7 @@ namespace StaffApp.Helpers
 					SupportHelper.UpdateSupportDetails((Support)updateObj);
 				}
 
-				staffObj.UpdateStaffDetails();
+				staffObj.UpdateStaffDetails(updateObj);
 			}
 			else
 			{

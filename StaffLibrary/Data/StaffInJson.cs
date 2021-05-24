@@ -41,7 +41,7 @@ namespace StaffLibrary.Data
 			SerializeToJson();
 		}
 
-		public void UpdateStaffDetails()
+		public void UpdateStaffDetails(Staff updateObj)
 		{
 			SerializeToJson();
 		}

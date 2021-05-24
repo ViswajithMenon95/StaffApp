@@ -10,7 +10,7 @@ namespace StaffLibrary.Data
 	public interface IStaff
 	{
 		void AddStaffDetails(Staff addObj);
-		void UpdateStaffDetails();
+		void UpdateStaffDetails(Staff updateObj);
 		Staff GetStaffById(int findId);
 		List<Staff> GetAllStaff();
 		void DeleteStaffDetails(Staff deleteObj);

@@ -36,7 +36,7 @@ namespace StaffLibrary.Data
 			SerializeToXml();
 		}
 
-		public void UpdateStaffDetails()
+		public void UpdateStaffDetails(Staff updateObj)
 		{
 			SerializeToXml();
 		}

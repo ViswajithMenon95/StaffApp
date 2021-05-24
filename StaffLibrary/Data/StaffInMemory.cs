@@ -12,7 +12,7 @@ namespace StaffLibrary.Data
 			staffList.Add(addObj);
 		}
 
-		public void UpdateStaffDetails()
+		public void UpdateStaffDetails(Staff updateObj)
 		{
 
 		}

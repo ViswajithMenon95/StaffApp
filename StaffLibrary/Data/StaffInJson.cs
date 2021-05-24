@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Newtonsoft.Json;
@@ -46,14 +47,14 @@ namespace StaffLibrary.Data
 			SerializeToJson();
 		}
 
-		public Staff GetStaffById(int staffId)
+		public Staff GetStaffById(int staffId, Type staffType)
 		{
 			Staff findObj = staffList.Find(searchObj => searchObj.Id == staffId);
 
 			return findObj;
 		}
 
-		public List<Staff> GetAllStaff()
+		public List<Staff> GetAllStaff(Type staffType)
 		{
 			return staffList;
 		}

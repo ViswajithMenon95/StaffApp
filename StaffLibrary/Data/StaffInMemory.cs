@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using StaffLibrary.Models.Base;
 
 namespace StaffLibrary.Data
@@ -17,14 +18,14 @@ namespace StaffLibrary.Data
 
 		}
 
-		public Staff GetStaffById(int staffId)
+		public Staff GetStaffById(int staffId, Type staffType)
 		{
 			Staff findObj = staffList.Find(searchObj => searchObj.Id == staffId);
 
 			return findObj;
 		}
 
-		public List<Staff> GetAllStaff()
+		public List<Staff> GetAllStaff(Type staffType)
 		{
 			return staffList;
 		}

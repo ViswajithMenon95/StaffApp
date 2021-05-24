@@ -3,7 +3,7 @@ using StaffLibrary.Models.Base;
 
 namespace StaffApp.Utilities
 {
-    public static class Utils
+	public static class Utils
     {
         public static void OperationsMenu()
         {
@@ -14,7 +14,7 @@ namespace StaffApp.Utilities
             Console.WriteLine("\t4 - Delete");
 
         }
-        public static void AddMenu()
+        public static void StaffMenu()
         {
             Console.WriteLine("Enter staff type\n");
             Console.WriteLine("\t1 - Teaching");

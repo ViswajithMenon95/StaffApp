@@ -6,13 +6,6 @@ using StaffApp.Helpers;
 
 namespace StaffApp
 {
-    public enum StaffType
-    {
-        Teacher = 1,
-        Admin,
-        Support
-    }
-
     class Program
     {
         static void Main(string[] args)
@@ -29,63 +22,62 @@ namespace StaffApp
 
             do
             {
-                int menuChoice;
                 var staffObj = (IStaff) Activator.CreateInstance(Type.GetType("StaffLibrary.Data." + implementationType + ", StaffLibrary"));
+				int staffChoice;
+				Utils.StaffMenu();
 
-                Utils.OperationsMenu();
+				if (int.TryParse(Console.ReadLine(), out staffChoice))
+				{
+					if (Enum.IsDefined(typeof(StaffType), staffChoice))
+					{
+						int menuChoice;
+						Utils.OperationsMenu();
 
-                if (int.TryParse(Console.ReadLine(), out menuChoice))
-                {
-                    switch (menuChoice)
-                    {
-                        case 1:
-                            int staffChoice;
-                            Utils.AddMenu();
-
-                            if (int.TryParse(Console.ReadLine(), out staffChoice))
-                            {
-                                if (Enum.IsDefined(typeof(StaffType), staffChoice))
-                                {
-									StaffHelper.AddDetails( (StaffType)staffChoice, staffObj );
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Invalid choice");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Invalid choice");
-                            }
-                            break;
-                        case 2:
-                            int viewChoice;
-                            Utils.ViewMenu();
-                            if (int.TryParse(Console.ReadLine(), out viewChoice))
-                            {
-								StaffHelper.ViewDetails(viewChoice, staffObj);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Invalid choice");
-                            }
-                            break;
-                        case 3:
-							StaffHelper.UpdateDetails(staffObj);
-                            break;
-                        case 4:
-							StaffHelper.DeleteDetails(staffObj);
-                            break;
-                        default:
-                            Console.WriteLine("Invalid choice");
-                            break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid choice");
-                }
-
+						if (int.TryParse(Console.ReadLine(), out menuChoice))
+						{
+							switch (menuChoice)
+							{
+								case 1:
+									StaffHelper.AddDetails((StaffType)staffChoice, staffObj);
+									break;
+								case 2:
+									int viewChoice;
+									Utils.ViewMenu();
+									if (int.TryParse(Console.ReadLine(), out viewChoice))
+									{
+										StaffHelper.ViewDetails((StaffType)staffChoice, viewChoice, staffObj);
+									}
+									else
+									{
+										Console.WriteLine("Invalid choice");
+									}
+									break;
+								case 3:
+									StaffHelper.UpdateDetails((StaffType)staffChoice, staffObj);
+									break;
+								case 4:
+									StaffHelper.DeleteDetails((StaffType)staffChoice, staffObj);
+									break;
+								default:
+									Console.WriteLine("Invalid choice");
+									break;
+							}
+						}
+						else
+						{
+							Console.WriteLine("Invalid choice");
+						}
+					}
+					else
+					{
+						Console.WriteLine("Invalid choice");
+					}
+				}
+				else
+				{
+					Console.WriteLine("Invalid choice");
+				}
+				
                 Console.WriteLine("\nPress Y to continue...");
                 isChar = Char.TryParse(Console.ReadLine().ToLower(), out continueChoice);
             } while (isChar == true && continueChoice == 'y');

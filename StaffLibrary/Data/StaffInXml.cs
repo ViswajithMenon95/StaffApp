@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
@@ -41,14 +42,14 @@ namespace StaffLibrary.Data
 			SerializeToXml();
 		}
 
-		public Staff GetStaffById(int staffId)
+		public Staff GetStaffById(int staffId, Type staffType)
 		{
 			Staff findObj = staffList.Find(searchObj => searchObj.Id == staffId);
 
 			return findObj;
 		}
 
-		public List<Staff> GetAllStaff()
+		public List<Staff> GetAllStaff(Type staffType)
 		{
 			return staffList;
 		}

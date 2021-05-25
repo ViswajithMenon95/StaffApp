@@ -6,7 +6,13 @@ using StaffApp.Helpers;
 
 namespace StaffApp
 {
-    class Program
+	public enum StaffType
+	{
+		Teacher = 1,
+		Admin,
+		Support
+	}
+	class Program
     {
         static void Main(string[] args)
         {
@@ -31,7 +37,7 @@ namespace StaffApp
 					if (Enum.IsDefined(typeof(StaffType), staffChoice))
 					{
 						int menuChoice;
-						Utils.OperationsMenu();
+						Utils.OperationsMenu((StaffType)staffChoice);
 
 						if (int.TryParse(Console.ReadLine(), out menuChoice))
 						{

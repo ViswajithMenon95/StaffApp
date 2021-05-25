@@ -22,7 +22,6 @@ namespace StaffApp.Helpers
 			else if (staffObj is StaffInDB)
 				maxId = 0;
 
-
 			if ( type == StaffType.Teacher )
 			{
 				addObj = TeacherHelper.AddTeacherDetails(maxId);
@@ -120,15 +119,15 @@ namespace StaffApp.Helpers
 				}
 				if (viewObj != null)
 				{
-					if (viewObj is Teacher)
+					if (staffType == typeof(Teacher))
 					{
 						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
 					}
-					else if (viewObj is Admin)
+					else if (staffType == typeof(Admin))
 					{
 						AdminHelper.ViewAdminDetails((Admin)viewObj);
 					}
-					else if (viewObj is Support)
+					else if (staffType == typeof(Support))
 					{
 						SupportHelper.ViewSupportDetails((Support)viewObj);
 					}
@@ -138,26 +137,38 @@ namespace StaffApp.Helpers
 					Console.WriteLine("Not found");
 				}
 			}
-			else if (1 < viewChoice && viewChoice < 6)
+			else if (viewChoice == 2)
 			{
-				
 				List<Staff> staffList = staffObj.GetAllStaff(staffType);
-				
-				foreach (Staff viewObj in staffList)
+
+				if (staffList.Count != 0)
 				{
-					if ((viewObj is Teacher) && (viewChoice == 2 || viewChoice == 5))
+					if (staffType == typeof(Teacher))
 					{
-						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
+						foreach (Staff viewObj in staffList)
+						{
+							TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
+						}
 					}
-					else if ((viewObj is Admin) && (viewChoice == 3 || viewChoice == 5))
+					else if (staffType == typeof(Admin))
 					{
-						AdminHelper.ViewAdminDetails((Admin)viewObj);
+						foreach (Staff viewObj in staffList)
+						{
+							AdminHelper.ViewAdminDetails((Admin)viewObj);
+						}
 					}
-					else if ((viewObj is Support) && (viewChoice == 4 || viewChoice == 5))
+					else if (staffType == typeof(Support))
 					{
-						SupportHelper.ViewSupportDetails((Support)viewObj);
+						foreach (Staff viewObj in staffList)
+						{
+							SupportHelper.ViewSupportDetails((Support)viewObj);
+						}
 					}
-				}
+				}	
+				else
+				{
+					Console.WriteLine("List is empty");
+				}		
 			}
 			else
 			{

@@ -7,12 +7,6 @@ using System.Threading.Tasks;
 
 namespace StaffLibrary.Data
 {
-	public enum StaffType
-	{
-		Teacher = 1,
-		Admin,
-		Support
-	}
 	public interface IStaff
 	{
 		void AddStaffDetails(Staff addObj);

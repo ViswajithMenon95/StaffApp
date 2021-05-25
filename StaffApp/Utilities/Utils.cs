@@ -1,18 +1,20 @@
 ﻿using System;
 using StaffLibrary.Models.Base;
 
+
 namespace StaffApp.Utilities
 {
 	public static class Utils
     {
-        public static void OperationsMenu()
+        public static void OperationsMenu(StaffType type)
         {
-            Console.WriteLine("\nEnter your choice:\n");
-            Console.WriteLine("\t1 - Add");
-            Console.WriteLine("\t2 - View");
-            Console.WriteLine("\t3 - Update");
-            Console.WriteLine("\t4 - Delete");
+			string staffType = type.ToString();
 
+            Console.WriteLine("\nEnter your choice:\n");
+            Console.WriteLine("\t1 - Add " + staffType + " staff");
+            Console.WriteLine("\t2 - View " + staffType + " staff");
+            Console.WriteLine("\t3 - Update " + staffType + " staff");
+            Console.WriteLine("\t4 - Delete " + staffType + " staff");
         }
         public static void StaffMenu()
         {
@@ -25,11 +27,7 @@ namespace StaffApp.Utilities
         {
             Console.WriteLine("Enter your choice\n");
             Console.WriteLine("\t1 - View by Id");
-            Console.WriteLine("\t2 - View Teaching staff");
-            Console.WriteLine("\t3 - View Admin staff");
-            Console.WriteLine("\t4 - View Support staff");
-            Console.WriteLine("\t5 - View All");
-
+            Console.WriteLine("\t2 - View All");
         }
 
         public static void AddCommonDetails(Staff addObj)

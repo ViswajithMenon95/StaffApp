@@ -21,9 +21,17 @@ namespace StaffLibrary.Data
 				SqlCommand cmd = new SqlCommand();
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
-				SetAddCmd(cmd, addObj);
 
-				cmd.ExecuteNonQuery();
+				if(CheckIfUnique(addObj, "Add"))
+				{
+					SetAddCmd(cmd, addObj);
+					cmd.ExecuteNonQuery();
+				}
+				else
+				{
+					Console.WriteLine("Phone number already exists");
+				}
+				
 				connection.Close();
 			}
 		}
@@ -38,9 +46,15 @@ namespace StaffLibrary.Data
 				SqlCommand cmd = new SqlCommand();
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
-				SetUpdateCmd(cmd, updateObj);
-
-				cmd.ExecuteNonQuery();
+				if(CheckIfUnique(updateObj, "Update"))
+				{
+					SetUpdateCmd(cmd, updateObj);
+					cmd.ExecuteNonQuery();
+				}
+				else
+				{
+					Console.WriteLine("Phone number already exists");
+				}
 				connection.Close();
 			}
 		}
@@ -88,7 +102,8 @@ namespace StaffLibrary.Data
 				SqlCommand cmd = new SqlCommand();
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
-				SetGetAllCmd(cmd, staffType);
+				cmd.Parameters.AddWithValue("@staffType", staffType.Name);
+				cmd.CommandText = "Proc_GetAllByType";
 
 				SqlDataReader reader = cmd.ExecuteReader();
 				while (reader.Read())
@@ -200,22 +215,6 @@ namespace StaffLibrary.Data
 			}
 		}
 
-		public void SetGetAllCmd(SqlCommand cmd, Type staffType)
-		{
-			if (staffType == typeof(Teacher))
-			{
-				cmd.CommandText = "Proc_TeacherStaffGetAll";
-			}
-			else if (staffType == typeof(Admin))
-			{
-				cmd.CommandText = "Proc_AdminStaffGetAll";
-			}
-			else if (staffType == typeof(Support))
-			{
-				cmd.CommandText = "Proc_SupportStaffGetAll";
-			}
-		}
-
 		public Staff CreateObject(Type staffType, SqlDataReader reader)
 		{
 			Staff findObj = null;
@@ -241,6 +240,39 @@ namespace StaffLibrary.Data
 			findObj.Phone = (string)reader[2];
 
 			return findObj;
+		}
+
+		public bool CheckIfUnique(Staff obj, string operationType)
+		{
+			bool isUnique;
+			string connString = ConfigurationManager.AppSettings["ConnString"];
+			using (SqlConnection connection = new SqlConnection(connString))
+			{
+				connection.Open();
+				string query = null;
+				if (operationType == "Add")
+				{
+					query = "Select * from [dbo].[Staff] where Staff.phone = '" + obj.Phone + "'";
+				}
+				else if(operationType == "Update")
+				{
+					query = "Select * from [dbo].[Staff] where Staff.phone = '" + obj.Phone + "' and Staff.staff_id != " + obj.Id;
+				}
+				SqlCommand cmd = new SqlCommand(query, connection);
+				SqlDataReader reader = cmd.ExecuteReader();
+
+				if(reader.Read())
+				{
+					isUnique = false;
+				}
+				else
+				{
+					isUnique = true;
+				}
+
+				connection.Close();
+			}
+			return isUnique;
 		}
 
 	}

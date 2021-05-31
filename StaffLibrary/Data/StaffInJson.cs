@@ -35,16 +35,20 @@ namespace StaffLibrary.Data
 			}
 		}
 
-		public void AddStaffDetails(Staff addObj)
+		public bool AddStaffDetails(Staff addObj)
 		{
 			staffList.Add(addObj);
 
 			SerializeToJson();
+
+			return true;
 		}
 
-		public void UpdateStaffDetails(Staff updateObj)
+		public bool UpdateStaffDetails(Staff updateObj)
 		{
 			SerializeToJson();
+
+			return true;
 		}
 
 		public Staff GetStaffById(int staffId, Type staffType)
@@ -60,11 +64,13 @@ namespace StaffLibrary.Data
 			return typeList;
 		}
 
-		public void DeleteStaffDetails(Staff deleteObj)
+		public bool DeleteStaffDetails(Staff deleteObj)
 		{
 			staffList.Remove(deleteObj);
 
 			SerializeToJson();
+
+			return true;
 		}
 
 		public int GetMaxId()

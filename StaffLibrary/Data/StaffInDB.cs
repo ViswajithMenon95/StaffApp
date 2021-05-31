@@ -10,8 +10,7 @@ namespace StaffLibrary.Data
 {
 	public class StaffInDB: IStaff
 	{
-
-		public void AddStaffDetails(Staff addObj)
+		public bool AddStaffDetails(Staff addObj)
 		{
 			string connString = ConfigurationManager.AppSettings["ConnString"];
 			using (SqlConnection connection = new SqlConnection(connString))
@@ -26,17 +25,18 @@ namespace StaffLibrary.Data
 				{
 					SetAddCmd(cmd, addObj);
 					cmd.ExecuteNonQuery();
+					connection.Close();
+					return true;
 				}
 				else
 				{
-					Console.WriteLine("Phone number already exists");
-				}
-				
-				connection.Close();
+					connection.Close();
+					return false;
+				}					
 			}
 		}
 
-		public void UpdateStaffDetails(Staff updateObj)
+		public bool UpdateStaffDetails(Staff updateObj)
 		{
 			string connString = ConfigurationManager.AppSettings["ConnString"];
 			using (SqlConnection connection = new SqlConnection(connString))
@@ -50,12 +50,14 @@ namespace StaffLibrary.Data
 				{
 					SetUpdateCmd(cmd, updateObj);
 					cmd.ExecuteNonQuery();
+					connection.Close();
+					return true;
 				}
 				else
 				{
-					Console.WriteLine("Phone number already exists");
-				}
-				connection.Close();
+					connection.Close();
+					return false;
+				}				
 			}
 		}
 
@@ -119,7 +121,7 @@ namespace StaffLibrary.Data
 			return staffList;
 		}
 
-		public void DeleteStaffDetails(Staff deleteObj)
+		public bool DeleteStaffDetails(Staff deleteObj)
 		{
 			string connString = ConfigurationManager.AppSettings["ConnString"];
 			using (SqlConnection connection = new SqlConnection(connString))
@@ -135,6 +137,7 @@ namespace StaffLibrary.Data
 				cmd.ExecuteNonQuery();
 				connection.Close();
 			}
+			return true;
 		}
 
 		public void SetAddCmd(SqlCommand cmd, Staff addObj)

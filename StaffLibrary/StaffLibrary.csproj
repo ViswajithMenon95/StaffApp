@@ -52,6 +52,7 @@
     <Compile Include="Data\StaffInXml.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Base\Staff.cs" />
+    <Compile Include="Models\StaffType.cs" />
     <Compile Include="Models\Support.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

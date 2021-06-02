@@ -22,22 +22,31 @@ namespace StaffApp.Helpers
 			else if (staffObj is StaffInDB)
 				maxId = 0;
 
-			if ( type == StaffType.Teacher )
+			if (type == StaffType.Teacher)
 			{
 				addObj = TeacherHelper.AddTeacherDetails(maxId);
 			}
 
-			else if ( type == StaffType.Admin )
+			else if (type == StaffType.Admin)
 			{
 				addObj = AdminHelper.AddAdminDetails(maxId);
 			}
 
-			else if ( type == StaffType.Support )
+			else if (type == StaffType.Support)
 			{
 				addObj = SupportHelper.AddSupportDetails(maxId);
 			}
 
-			staffObj.AddStaffDetails(addObj);
+			bool operationResult = staffObj.AddStaffDetails(addObj);
+
+			if(operationResult)
+			{
+				Console.WriteLine("Added");
+			}
+			else
+			{
+				Console.WriteLine("Not added");
+			}
 		}
 
 		public static void UpdateDetails(StaffType type, IStaff staffObj)
@@ -45,38 +54,23 @@ namespace StaffApp.Helpers
 			Staff updateObj = null;
 			int findId;
 
-			Type staffType = null;
-
-			if (type == StaffType.Teacher)
-			{
-				staffType = typeof(Teacher);
-			}
-			else if (type == StaffType.Admin)
-			{
-				staffType = typeof(Admin);
-			}
-			else if (type == StaffType.Support)
-			{
-				staffType = typeof(Support);
-			}
-
 			Console.WriteLine("Enter the Id of the staff member");
 			if (int.TryParse(Console.ReadLine(), out findId))
 			{
-				updateObj = staffObj.GetStaffById(findId, staffType);
+				updateObj = staffObj.GetStaffById(findId, type);
 			}
 
 			if(updateObj!=null)
 			{
-				if (updateObj is Teacher)
+				if (updateObj.Type == StaffType.Teacher)
 				{
 					TeacherHelper.UpdateTeacherDetails((Teacher)updateObj);
 				}
-				else if (updateObj is Admin)
+				else if (updateObj.Type == StaffType.Admin)
 				{
 					AdminHelper.UpdateAdminDetails((Admin)updateObj);
 				}
-				else if (updateObj is Support)
+				else if (updateObj.Type == StaffType.Support)
 				{
 					SupportHelper.UpdateSupportDetails((Support)updateObj);
 				}
@@ -92,21 +86,6 @@ namespace StaffApp.Helpers
 
 		public static void ViewDetails(StaffType type, int viewChoice, IStaff staffObj)
 		{
-			Type staffType = null;
-
-			if (type == StaffType.Teacher)
-			{
-				staffType = typeof(Teacher);
-			}
-			else if (type == StaffType.Admin)
-			{
-				staffType = typeof(Admin);
-			}
-			else if (type == StaffType.Support)
-			{
-				staffType = typeof(Support);
-			}
-
 			if (viewChoice == 1)
 			{
 				int findId;
@@ -115,19 +94,19 @@ namespace StaffApp.Helpers
 				Console.WriteLine("Enter the Id of the staff member");
 				if (int.TryParse(Console.ReadLine(), out findId))
 				{
-					viewObj = staffObj.GetStaffById(findId, staffType);
+					viewObj = staffObj.GetStaffById(findId, type);
 				}
 				if (viewObj != null)
 				{
-					if (staffType == typeof(Teacher))
+					if (viewObj.Type == StaffType.Teacher)
 					{
 						TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
 					}
-					else if (staffType == typeof(Admin))
+					else if (viewObj.Type == StaffType.Admin)
 					{
 						AdminHelper.ViewAdminDetails((Admin)viewObj);
 					}
-					else if (staffType == typeof(Support))
+					else if (viewObj.Type == StaffType.Support)
 					{
 						SupportHelper.ViewSupportDetails((Support)viewObj);
 					}
@@ -139,25 +118,25 @@ namespace StaffApp.Helpers
 			}
 			else if (viewChoice == 2)
 			{
-				List<Staff> staffList = staffObj.GetAllStaff(staffType);
+				List<Staff> staffList = staffObj.GetAllStaff(type);
 
 				if (staffList.Count != 0)
 				{
-					if (staffType == typeof(Teacher))
+					if (type == StaffType.Teacher)
 					{
 						foreach (Staff viewObj in staffList)
 						{
 							TeacherHelper.ViewTeacherDetails((Teacher)viewObj);
 						}
 					}
-					else if (staffType == typeof(Admin))
+					else if (type == StaffType.Admin)
 					{
 						foreach (Staff viewObj in staffList)
 						{
 							AdminHelper.ViewAdminDetails((Admin)viewObj);
 						}
 					}
-					else if (staffType == typeof(Support))
+					else if (type == StaffType.Support)
 					{
 						foreach (Staff viewObj in staffList)
 						{
@@ -181,25 +160,10 @@ namespace StaffApp.Helpers
 			Staff deleteObj = null;
 			int findId;
 
-			Type staffType = null;
-
-			if (type == StaffType.Teacher)
-			{
-				staffType = typeof(Teacher);
-			}
-			else if (type == StaffType.Admin)
-			{
-				staffType = typeof(Admin);
-			}
-			else if (type == StaffType.Support)
-			{
-				staffType = typeof(Support);
-			}
-
 			Console.WriteLine("Enter the Id of the staff member");
 			if (int.TryParse(Console.ReadLine(), out findId))
 			{
-				deleteObj = staffObj.GetStaffById(findId, staffType);
+				deleteObj = staffObj.GetStaffById(findId, type);
 			}
 
 			if (deleteObj != null)

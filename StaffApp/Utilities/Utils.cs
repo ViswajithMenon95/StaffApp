@@ -1,4 +1,5 @@
 ﻿using System;
+using StaffLibrary.Models;
 using StaffLibrary.Models.Base;
 
 
@@ -42,7 +43,7 @@ namespace StaffApp.Utilities
         {
             Console.WriteLine("Id: {0}", viewObj.Id);
             Console.WriteLine("Name: {0}", viewObj.Name);
-            Console.WriteLine("Type: {0}", viewObj.Type);
+            Console.WriteLine("Type: {0}", viewObj.Type.ToString());
             Console.WriteLine("Phone: {0}", viewObj.Phone);
         }
 

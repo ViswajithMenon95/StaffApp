@@ -7,7 +7,7 @@ namespace StaffLibrary.Models
 		public int Age { get; set; }
 		public Support()
 		{
-			Type = "Support";
+			Type = StaffType.Support;
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace StaffLibrary.Models
 		public string Department { get; set; }
 		public Admin()
 		{
-			Type = "Administrative";
+			Type = StaffType.Admin;
 		}
 	}
 }

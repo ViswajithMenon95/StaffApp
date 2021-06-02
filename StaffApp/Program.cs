@@ -3,15 +3,10 @@ using StaffApp.Utilities;
 using StaffLibrary.Data;
 using System.Configuration;
 using StaffApp.Helpers;
+using StaffLibrary.Models;
 
 namespace StaffApp
 {
-	public enum StaffType
-	{
-		Teacher = 1,
-		Admin,
-		Support
-	}
 	class Program
     {
         static void Main(string[] args)
@@ -34,6 +29,7 @@ namespace StaffApp
 
 				if (int.TryParse(Console.ReadLine(), out staffChoice))
 				{
+					staffChoice--;
 					if (Enum.IsDefined(typeof(StaffType), staffChoice))
 					{
 						int menuChoice;

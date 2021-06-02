@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Configuration;
+using StaffLibrary.Models;
 using StaffLibrary.Models.Base;
 
 namespace StaffLibrary.Data
@@ -32,11 +33,17 @@ namespace StaffLibrary.Data
 
 		public bool AddStaffDetails(Staff addObj)
 		{
-			staffList.Add(addObj);
+			if(CheckIfUnique(addObj, "Add"))
+			{
+				staffList.Add(addObj);
+				SerializeToXml();
 
-			SerializeToXml();
-
-			return true;
+				return true;
+			}
+			else
+			{
+				return false;
+			}				
 		}
 
 		public bool UpdateStaffDetails(Staff updateObj)
@@ -46,16 +53,16 @@ namespace StaffLibrary.Data
 			return true;
 		}
 
-		public Staff GetStaffById(int staffId, Type staffType)
+		public Staff GetStaffById(int staffId, StaffType type)
 		{
-			Staff findObj = staffList.Find(searchObj => searchObj.Id == staffId && searchObj.GetType() == staffType);
+			Staff findObj = staffList.Find(searchObj => searchObj.Id == staffId && searchObj.Type == type);
 
 			return findObj;
 		}
 
-		public List<Staff> GetAllStaff(Type staffType)
+		public List<Staff> GetAllStaff(StaffType type)
 		{
-			List<Staff> typeList = staffList.FindAll(searchObj => searchObj.GetType() == staffType);
+			List<Staff> typeList = staffList.FindAll(searchObj => searchObj.Type == type);
 			return typeList;
 		}
 
@@ -92,6 +99,32 @@ namespace StaffLibrary.Data
 			XmlWriter writer = XmlWriter.Create(fileName, settings);
 			writeSerializer.Serialize(writer, staffList);
 			writer.Close();
+		}
+
+		public bool CheckIfUnique(Staff obj, string operationType)
+		{
+			bool isUnique;
+			Predicate<Staff> searchPredicate = null;
+
+			if(operationType == "Add")
+			{
+				searchPredicate = searchObj => searchObj.Phone == obj.Phone;
+			}
+			else if(operationType == "Update")
+			{
+				searchPredicate = searchObj => (searchObj.Phone == obj.Phone && searchObj.Id != obj.Id);
+			}
+
+			if (staffList.Exists(searchPredicate))
+			{
+				isUnique = false;
+			}
+			else
+			{
+				isUnique = true;
+			}
+
+			return isUnique;
 		}
 
 	}

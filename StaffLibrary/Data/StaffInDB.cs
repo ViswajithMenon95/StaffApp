@@ -21,16 +21,14 @@ namespace StaffLibrary.Data
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
 
-				if(CheckIfUnique(addObj, "Add"))
+				if(CheckIfUnique(addObj))
 				{
 					SetAddCmd(cmd, addObj);
 					cmd.ExecuteNonQuery();
-					connection.Close();
 					return true;
 				}
 				else
 				{
-					connection.Close();
 					return false;
 				}					
 			}
@@ -46,22 +44,20 @@ namespace StaffLibrary.Data
 				SqlCommand cmd = new SqlCommand();
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
-				if(CheckIfUnique(updateObj, "Update"))
+				if(CheckIfUnique(updateObj))
 				{
 					SetUpdateCmd(cmd, updateObj);
 					cmd.ExecuteNonQuery();
-					connection.Close();
 					return true;
 				}
 				else
 				{
-					connection.Close();
 					return false;
 				}				
 			}
 		}
 
-		public Staff GetStaffById(int staffId, Type staffType)
+		public Staff GetStaffById(int staffId, StaffType type)
 		{
 			Staff findObj = null;
 			string connString = ConfigurationManager.AppSettings["ConnString"];
@@ -72,13 +68,15 @@ namespace StaffLibrary.Data
 				SqlCommand cmd = new SqlCommand();
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
-				SetGetByIdCmd(cmd, staffId, staffType);
+				cmd.Parameters.AddWithValue("@id", staffId);
+				cmd.Parameters.AddWithValue("@staffType", (int)type);
+				cmd.CommandText = "Proc_GetById";
 
 				SqlDataReader reader = cmd.ExecuteReader();
 
 				if (reader.Read())
 				{
-					findObj = CreateObject(staffType, reader);
+					findObj = CreateObject(type, reader);
 				}
 				else
 				{
@@ -86,13 +84,12 @@ namespace StaffLibrary.Data
 				}
 
 				reader.Close();
-				connection.Close();
 			}
 
 			return findObj;
 		}
 
-		public List<Staff> GetAllStaff(Type staffType)
+		public List<Staff> GetAllStaff(StaffType type)
 		{
 			List<Staff> staffList = new List<Staff>();
 
@@ -104,18 +101,17 @@ namespace StaffLibrary.Data
 				SqlCommand cmd = new SqlCommand();
 				cmd.CommandType = System.Data.CommandType.StoredProcedure;
 				cmd.Connection = connection;
-				cmd.Parameters.AddWithValue("@staffType", staffType.Name);
-				cmd.CommandText = "Proc_GetAllByType";
+				cmd.Parameters.AddWithValue("@staffType", (int)type);
+				cmd.CommandText = "Proc_GetByType";
 
 				SqlDataReader reader = cmd.ExecuteReader();
 				while (reader.Read())
 				{
-					Staff listObj = CreateObject(staffType, reader);
+					Staff listObj = CreateObject(type, reader);
 
 					staffList.Add(listObj);
 				}
 				reader.Close();
-				connection.Close();
 			}
 
 			return staffList;
@@ -135,7 +131,6 @@ namespace StaffLibrary.Data
 				cmd.CommandText = "Proc_StaffDelete";
 
 				cmd.ExecuteNonQuery();
-				connection.Close();
 			}
 			return true;
 		}
@@ -145,25 +140,26 @@ namespace StaffLibrary.Data
 			DataTable staffTable = new DataTable();
 			staffTable.Columns.Add("name");
 			staffTable.Columns.Add("phone");
-
-			if (addObj is Teacher)
+			staffTable.Columns.Add("type");
+	
+			if (addObj.Type == StaffType.Teacher)
 			{
 				staffTable.Columns.Add("subject");
-				staffTable.Rows.Add(addObj.Name, addObj.Phone, ((Teacher)addObj).Subject);
+				staffTable.Rows.Add(addObj.Name, addObj.Phone, ((Teacher)addObj).Subject, (int)addObj.Type);
 				cmd.Parameters.Add("@teacherDetails", System.Data.SqlDbType.Structured).Value = staffTable;
 				cmd.CommandText = "Proc_TeacherStaffAdd";
 			}
-			else if (addObj is Admin)
+			else if (addObj.Type == StaffType.Admin)
 			{
 				staffTable.Columns.Add("department");
-				staffTable.Rows.Add(addObj.Name, addObj.Phone, ((Admin)addObj).Department);
+				staffTable.Rows.Add(addObj.Name, addObj.Phone, ((Admin)addObj).Department, (int)addObj.Type);
 				cmd.Parameters.Add("@adminDetails", System.Data.SqlDbType.Structured).Value = staffTable;
 				cmd.CommandText = "Proc_AdminStaffAdd";
 			}
-			else if (addObj is Support)
+			else if (addObj.Type == StaffType.Support)
 			{
 				staffTable.Columns.Add("age");
-				staffTable.Rows.Add(addObj.Name, addObj.Phone, ((Support)addObj).Age);
+				staffTable.Rows.Add(addObj.Name, addObj.Phone, ((Support)addObj).Age, (int)addObj.Type);
 				cmd.Parameters.Add("@supportDetails", System.Data.SqlDbType.Structured).Value = staffTable;
 				cmd.CommandText = "Proc_SupportStaffAdd";
 			}
@@ -175,105 +171,84 @@ namespace StaffLibrary.Data
 			DataTable staffTable = new DataTable();
 			staffTable.Columns.Add("name");
 			staffTable.Columns.Add("phone");
+			staffTable.Columns.Add("type");
 
-			if (updateObj is Teacher)
+			if (updateObj.Type ==  StaffType.Teacher)
 			{
 				staffTable.Columns.Add("subject");
-				staffTable.Rows.Add(updateObj.Name, updateObj.Phone, ((Teacher)updateObj).Subject);
+				staffTable.Rows.Add(updateObj.Name, updateObj.Phone, ((Teacher)updateObj).Subject, (int)updateObj.Type);
 				cmd.Parameters.Add("@teacherDetails", System.Data.SqlDbType.Structured).Value = staffTable;
 				cmd.CommandText = "Proc_TeacherStaffUpdate";
 			}
-			else if (updateObj is Admin)
+			else if (updateObj.Type == StaffType.Admin)
 			{
 				staffTable.Columns.Add("department");
-				staffTable.Rows.Add(updateObj.Name, updateObj.Phone, ((Admin)updateObj).Department);
+				staffTable.Rows.Add(updateObj.Name, updateObj.Phone, ((Admin)updateObj).Department, (int)updateObj.Type);
 				cmd.Parameters.Add("@adminDetails", System.Data.SqlDbType.Structured).Value = staffTable;
 				cmd.CommandText = "Proc_AdminStaffUpdate";
 			}
-			else if (updateObj is Support)
+			else if (updateObj.Type == StaffType.Support)
 			{
 				staffTable.Columns.Add("age");
-				staffTable.Rows.Add(updateObj.Name, updateObj.Phone, ((Support)updateObj).Age);
+				staffTable.Rows.Add(updateObj.Name, updateObj.Phone, ((Support)updateObj).Age, (int)updateObj.Type);
 				cmd.Parameters.Add("@supportDetails", System.Data.SqlDbType.Structured).Value = staffTable;
 				cmd.CommandText = "Proc_SupportStaffUpdate";
 			}
 
 		}
 
-		public void SetGetByIdCmd(SqlCommand cmd, int staffId, Type staffType)
+		public Staff CreateObject(StaffType type, SqlDataReader reader)
 		{
-			cmd.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = staffId;
+			Staff staff = null;
 
-			if (staffType == typeof(Teacher))
+			if (type == StaffType.Teacher)
 			{
-				cmd.CommandText = "Proc_TeacherStaffGetById";
+				staff = new Teacher();
+				((Teacher)staff).Subject = (string)reader["subject"];
 			}
-			else if(staffType == typeof(Admin))
-            {
-				cmd.CommandText = "Proc_AdminStaffGetById";
-			}
-			else if(staffType == typeof(Support))
+			else if (type == StaffType.Admin)
 			{
-				cmd.CommandText = "Proc_SupportStaffGetById";
+				staff = new Admin();
+				((Admin)staff).Department = (string)reader["department"];
 			}
+			else if (type == StaffType.Support)
+			{
+				staff = new Support();
+				((Support)staff).Age = (int)reader["age"];
+			}
+
+			staff.Id = (int)reader["staff_id"];
+			staff.Name = (string)reader["name"];
+			staff.Phone = (string)reader["phone"];
+
+			return staff;
 		}
 
-		public Staff CreateObject(Type staffType, SqlDataReader reader)
-		{
-			Staff findObj = null;
-
-			if (staffType == typeof(Teacher))
-			{
-				findObj = new Teacher();
-				((Teacher)findObj).Subject = (string)reader[3];
-			}
-			else if (staffType == typeof(Admin))
-			{
-				findObj = new Admin();
-				((Admin)findObj).Department = (string)reader[3];
-			}
-			else if (staffType == typeof(Support))
-			{
-				findObj = new Support();
-				((Support)findObj).Age = (int)reader[3];
-			}
-
-			findObj.Id = (int)reader[0];
-			findObj.Name = (string)reader[1];
-			findObj.Phone = (string)reader[2];
-
-			return findObj;
-		}
-
-		public bool CheckIfUnique(Staff obj, string operationType)
+		public bool CheckIfUnique(Staff obj)
 		{
 			bool isUnique;
 			string connString = ConfigurationManager.AppSettings["ConnString"];
 			using (SqlConnection connection = new SqlConnection(connString))
 			{
 				connection.Open();
-				string query = null;
-				if (operationType == "Add")
-				{
-					query = "Select * from [dbo].[Staff] where Staff.phone = '" + obj.Phone + "'";
-				}
-				else if(operationType == "Update")
-				{
-					query = "Select * from [dbo].[Staff] where Staff.phone = '" + obj.Phone + "' and Staff.staff_id != " + obj.Id;
-				}
-				SqlCommand cmd = new SqlCommand(query, connection);
-				SqlDataReader reader = cmd.ExecuteReader();
+				
+				SqlCommand cmd = new SqlCommand();
+				cmd.Parameters.AddWithValue("@id", obj.Id);
+				cmd.Parameters.AddWithValue("@phone", obj.Phone);
 
-				if(reader.Read())
+				SqlParameter outParameter = new SqlParameter
 				{
-					isUnique = false;
-				}
-				else
-				{
-					isUnique = true;
-				}
-
-				connection.Close();
+					ParameterName = "@isUnique",
+					SqlDbType = SqlDbType.Bit,
+					Direction = ParameterDirection.Output
+				};
+				cmd.Parameters.Add(outParameter);
+				cmd.Connection = connection;
+				cmd.CommandType = System.Data.CommandType.StoredProcedure;
+				cmd.CommandText = "Proc_CheckUniquePhone";
+		
+				cmd.ExecuteNonQuery();
+				isUnique = (bool)outParameter.Value;
 			}
 			return isUnique;
 		}

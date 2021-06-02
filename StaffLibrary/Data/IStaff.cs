@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using StaffLibrary.Models.Base;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StaffLibrary.Models;
 
 namespace StaffLibrary.Data
 {
@@ -11,8 +9,8 @@ namespace StaffLibrary.Data
 	{
 		bool AddStaffDetails(Staff addObj);
 		bool UpdateStaffDetails(Staff updateObj);
-		Staff GetStaffById(int findId, Type staffType);
-		List<Staff> GetAllStaff(Type staffType);
+		Staff GetStaffById(int findId, StaffType type);
+		List<Staff> GetAllStaff(StaffType type);
 		bool DeleteStaffDetails(Staff deleteObj);
 	}
 }

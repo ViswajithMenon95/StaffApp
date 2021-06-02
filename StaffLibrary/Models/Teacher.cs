@@ -7,7 +7,7 @@ namespace StaffLibrary.Models
 		public string Subject { get; set; }
 		public Teacher()
 		{
-			Type = "Teaching";
+			Type = StaffType.Teacher;
 		}
 	}
 }

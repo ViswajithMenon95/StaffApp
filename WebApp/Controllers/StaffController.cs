@@ -14,16 +14,14 @@ namespace WebApp.Controllers
 	[RoutePrefix("api/staff")]
     public class StaffController : ApiController
     {
-		static string implementationType = ConfigurationManager.AppSettings["ImplementationType"];
-
 		[HttpGet]
 		[Route("")]
 		public IHttpActionResult GetByType(string type)
 		{
-			var staffObj = (IStaff)Activator.CreateInstance(Type.GetType("StaffLibrary.Data." + implementationType + ", StaffLibrary"));
-			List<Staff> staffList = null;
-			Type staffType = Type.GetType("StaffLibrary.Models." + type + ", StaffLibrary");
-			staffList = staffObj.GetAllStaff(staffType);
+			StaffInDB obj = new StaffInDB();
+			StaffType enumType = (StaffType)Enum.Parse(typeof(StaffType), type);
+
+			List<Staff> staffList = obj.GetAllStaff(enumType);
 
 			return Ok(staffList);
 		}
@@ -32,9 +30,10 @@ namespace WebApp.Controllers
 		[Route("{id:int}")]
 		public IHttpActionResult GetStaffById(int id, string type) 
 		{
-			var staffObj = (IStaff)Activator.CreateInstance(Type.GetType("StaffLibrary.Data." + implementationType + ", StaffLibrary"));
-			Type staffType = Type.GetType("StaffLibrary.Models." + type + ", StaffLibrary");
-			Staff findObj = staffObj.GetStaffById(id, staffType);
+			StaffInDB obj = new StaffInDB();
+			StaffType enumType = (StaffType)Enum.Parse(typeof(StaffType), type);
+
+			Staff findObj = obj.GetStaffById(id, enumType);
 
 			if (findObj == null)
 			{
@@ -50,32 +49,21 @@ namespace WebApp.Controllers
 		[Route("add")]
 		public IHttpActionResult AddStaff(string type, StaffObject reqObj)
 		{
-			var staffObj = (IStaff)Activator.CreateInstance(Type.GetType("StaffLibrary.Data." + implementationType + ", StaffLibrary"));
+			StaffInDB obj = new StaffInDB();
 			Staff addObj = null;
-			Type staffType = Type.GetType("StaffLibrary.Models." + type + ", StaffLibrary");
+			StaffType enumType = (StaffType)Enum.Parse(typeof(StaffType), type);
 
-			int maxId = 0;
-
-			if (staffObj is StaffInMemory)
-				maxId = ((StaffInMemory)staffObj).GetMaxId();
-			else if (staffObj is StaffInXml)
-				maxId = ((StaffInXml)staffObj).GetMaxId();
-			else if (staffObj is StaffInJson)
-				maxId = ((StaffInJson)staffObj).GetMaxId();
-			else if (staffObj is StaffInDB)
-				maxId = 0;
-
-			if (staffType == typeof(Teacher))
+			if (enumType == StaffType.Teacher)
 			{
 				addObj = new Teacher();
 				((Teacher)addObj).Subject = reqObj.Subject;
 			}
-			else if (staffType == typeof(Admin))
+			else if (enumType == StaffType.Admin)
 			{
 				addObj = new Admin();
 				((Admin)addObj).Department = reqObj.Department;
 			}
-			else if (staffType == typeof(Support))
+			else if (enumType == StaffType.Support)
 			{
 				addObj = new Support();
 				((Support)addObj).Age = reqObj.Age;
@@ -83,9 +71,8 @@ namespace WebApp.Controllers
 
 			addObj.Name = reqObj.Name;
 			addObj.Phone = reqObj.Phone;
-			addObj.Id = maxId + 1;
 
-			bool operationResult = staffObj.AddStaffDetails(addObj);
+			bool operationResult = obj.AddStaffDetails(addObj);
 
 			if (operationResult)
 			{
@@ -101,9 +88,10 @@ namespace WebApp.Controllers
 		[Route("update/{id:int}")]
 		public IHttpActionResult UpdateStaff(int id, string type, StaffObject reqObj)
 		{
-			var staffObj = (IStaff)Activator.CreateInstance(Type.GetType("StaffLibrary.Data." + implementationType + ", StaffLibrary"));
-			Type staffType = Type.GetType("StaffLibrary.Models." + type + ", StaffLibrary");
-			Staff updateObj = staffObj.GetStaffById(id, staffType);
+			StaffInDB obj = new StaffInDB();
+			StaffType enumType = (StaffType)Enum.Parse(typeof(StaffType), type);
+
+			Staff updateObj = obj.GetStaffById(id, enumType);
 
 			if (updateObj == null)
 			{
@@ -119,21 +107,21 @@ namespace WebApp.Controllers
 				{
 					updateObj.Phone = reqObj.Phone;
                 }
-				if (updateObj is Teacher)
+				if (updateObj.Type == StaffType.Teacher)
 				{
 					if (!string.IsNullOrWhiteSpace(reqObj.Subject))
 					{
 						((Teacher)updateObj).Subject = reqObj.Subject;
                     }
 				}
-				else if (updateObj is Admin)
+				else if (updateObj.Type == StaffType.Admin)
 				{
 					if (!string.IsNullOrWhiteSpace(reqObj.Department))
                     {
 						((Admin)updateObj).Department = reqObj.Department;
                     }
 				}
-				else if(updateObj is Support)
+				else if(updateObj.Type == StaffType.Support)
                 {
 					if (reqObj.Age != 0)
 					{
@@ -141,7 +129,7 @@ namespace WebApp.Controllers
 					}
                 }
 				
-				bool operationResult = staffObj.UpdateStaffDetails(updateObj);
+				bool operationResult = obj.UpdateStaffDetails(updateObj);
 
 				if(operationResult)
 				{
@@ -158,9 +146,10 @@ namespace WebApp.Controllers
 		[Route("delete/{id:int}")]
 		public IHttpActionResult DeleteStaff(int id, string type)
 		{
-			var staffObj = (IStaff)Activator.CreateInstance(Type.GetType("StaffLibrary.Data." + implementationType + ", StaffLibrary"));
-			Type staffType = Type.GetType("StaffLibrary.Models." + type + ", StaffLibrary");
-			Staff deleteObj = staffObj.GetStaffById(id, staffType);
+			StaffInDB obj = new StaffInDB();
+			StaffType enumType = (StaffType)Enum.Parse(typeof(StaffType), type);
+
+			Staff deleteObj = obj.GetStaffById(id, enumType);
 
 			if(deleteObj == null)
 			{
@@ -168,7 +157,7 @@ namespace WebApp.Controllers
 			}
 			else
 			{
-				staffObj.DeleteStaffDetails(deleteObj);
+				obj.DeleteStaffDetails(deleteObj);
 				return Ok();
 			}
 		}			

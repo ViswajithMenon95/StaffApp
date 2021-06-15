@@ -15,6 +15,21 @@ namespace WebApp.Controllers
     public class StaffController : ApiController
     {
 		[HttpGet]
+		[Route("all")]
+		public IHttpActionResult GetAll()
+		{
+			StaffInDB obj = new StaffInDB();
+			List<Staff> staffList = new List<Staff>();
+
+			foreach(StaffType enumType in Enum.GetValues(typeof(StaffType)))
+            {
+				staffList.AddRange(obj.GetAllStaff(enumType));
+            }
+
+			return Ok(staffList);
+		}
+
+		[HttpGet]
 		[Route("")]
 		public IHttpActionResult GetByType(string type)
 		{
